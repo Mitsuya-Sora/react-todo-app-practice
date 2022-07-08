@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "./styles.css";
+import { InputTodo } from "./components/InputTodo.jsx";
+import { IncompleteTodo } from "./components/IncompleteTodo.jsx";
+import { CompleteTodo } from "./components/CompleteTodo";
 
 export const App = () => {
   const [incompleteTodos, setIncompleteTodos] = useState(["task1", "task2"]);
@@ -39,47 +42,26 @@ export const App = () => {
     setCompleteTodos(newCompleteTodos);
   };
 
+  const isTodoMoreThanFive = incompleteTodos.length >= 5;
+
   return (
     <>
-      <div className="input-area">
-        <input
-          placeholder="TODOを入力"
-          value={inputText}
-          onChange={setTextInForm}
-        />
-        <button onClick={addTodoToList}>登録</button>
-      </div>
-      <div className="incomplete-area">
-        <div className="title">未完了</div>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-              <li key={todo} className="list-row">
-                <div>{todo}</div>
-                <button onClick={() => moveTodoToCompleteList(index)}>
-                  完了
-                </button>
-                <button onClick={() => removeTodoFromList(index)}>削除</button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="complete-area">
-        <div className="title">完了</div>
-        <ul>
-          {completeTodos.map((todo, index) => {
-            return (
-              <li key={todo} className="list-row">
-                <div>{todo}</div>
-                <button onClick={() => moveTodoToIncompleteList(index)}>
-                  戻す
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <InputTodo
+        inputText={inputText}
+        setTextInForm={setTextInForm}
+        addTodoToList={addTodoToList}
+        isDisabled={isTodoMoreThanFive}
+      />
+
+      <IncompleteTodo
+        incompleteTodos={incompleteTodos}
+        moveTodoToCompleteList={moveTodoToCompleteList}
+        removeTodoFromList={removeTodoFromList}
+      />
+      <CompleteTodo
+        completeTodos={completeTodos}
+        moveTodoToIncompleteList={moveTodoToIncompleteList}
+      />
     </>
   );
 };
